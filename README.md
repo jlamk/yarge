@@ -1,5 +1,4 @@
-# yarge
-Yarge-Editor
+# Yarge: Cross-Platform YARA Rule Editor
 
 Yarge Editor: Cross-Platform YARA Rule Editor
 
