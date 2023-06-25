@@ -44,6 +44,8 @@ CONFIG += lrelease
 CONFIG += embed_translations
 
 LIBS += /usr/lib/libyara.so
+LIBS += /usr/lib/libjansson.so
+LIBS += /usr/lib/libssl.so
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
