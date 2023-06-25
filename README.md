@@ -10,6 +10,4 @@ Yarge Editor is a powerful, cross-platform, free, and open-source tool designed 
 [![libyara](libyara)](https://github.com/VirusTotal/yara)<br>
 [![libjansson](libjansson)](https://github.com/akheron/jansson)<br>
 libssl<br>
-
-
-
+qmake<br>
