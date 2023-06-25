@@ -21,7 +21,6 @@ void callback_function(
     char buf[1024];
     sprintf(buf," %s at line %d\n",message,line_number);
     *output += buf;
-    //qInfo() << buf;
 }
 
 void YARGE_YARA::Compile( QString text )

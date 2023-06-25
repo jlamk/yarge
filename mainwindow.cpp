@@ -5,6 +5,7 @@
 #include "tab.h"
 #include "outputdialog.h"
 #include "about.h"
+#include "searchdialog.h"
 
 #include <QFileDialog>
 #include <QFileInfo>
@@ -13,9 +14,9 @@
 #include <QDebug>
 #include <QDialog>
 #include <QInputDialog>
+#include <QMessageBox>
 
 TAB *CurrentTab;
-//CodeEditor *CurrentEditor;
 
 void MainWindow::currentChanged(int index)
 {
@@ -82,12 +83,12 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
     connect( tabwidget,SIGNAL( tabCloseRequested(int) ), this, SLOT( tabCloseRequested(int) )  );
     connect( tabwidget,SIGNAL( currentChanged(int) ), this, SLOT( currentChanged(int) )  );
 
-    this->tabwidget->setStyleSheet("color:black; background-color:#fdf6e3; QMenuBar::item {background:black; } ");
+    this->tabwidget->setStyleSheet("color:black; background-color:#fdf6e3;");
     ui->centralwidget->layout()->setContentsMargins(0,0,0,0);
 
-    QSplitter *sp = new QSplitter( Qt::Vertical );
+    main_layout = new QSplitter( Qt::Vertical );
 
-    sp->addWidget(tabwidget);
+    main_layout->addWidget(tabwidget);
 
     if ( arguments.count() == 2 )
     {
@@ -113,15 +114,20 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
         TAB *tab = new TAB();
         tab->title = "New File";
         NewPage(tab);
-        tab->editor->document()->setPlainText("import \"pe\"\n\nrule RuleName {\n\nmeta:\nauthor = \"name\"\nmy_identifier_1 = \"Some string data\"\n\nstrings:\n$a = \"hello\"\n\ncondition:\nany of them \n}");
+        tab->editor->document()->setPlainText("import \"pe\"\n\nrule RuleName {\n\nmeta:\n      author = \"name\"\n      my_identifier_1 = \"identifier\"\n\nstrings:\n      $a = \"malware\"\n\ncondition:\n       any of them \n\n}");
     }
 
 
     this->output_dialog = new OutputDialog();
-    sp->addWidget(this->output_dialog);
+    main_layout->addWidget(this->output_dialog);
     this->output_dialog ->setVisible(false);
 
-    setCentralWidget(sp);
+    find = new SearchDialog();
+    main_layout->addWidget(find);
+    find->setVisible(false);
+    connect( find,SIGNAL( Find( QString,bool ) ),this, SLOT( FindText( QString,bool  ) )  );
+
+    setCentralWidget(main_layout);
 }
 
 MainWindow::~MainWindow()
@@ -215,11 +221,49 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_actionFile_Md5_hash_triggered()
 {
      QString filePath = QFileDialog::getOpenFileName(this, "Open File");
+     if ( filePath.isEmpty() ) return;
      QString hash = calculateFileHash(filePath);
      QInputDialog dialog;
      dialog.setLabelText(filePath);
      dialog.setTextValue(hash);
      dialog.exec();
+}
+
+void MainWindow::findString(QString s, bool reverse, bool casesens, bool words)
+{
+    QTextDocument::FindFlags flag;
+        if (reverse) flag |= QTextDocument::FindBackward;
+        if (casesens) flag |= QTextDocument::FindCaseSensitively;
+        if (words) flag |= QTextDocument::FindWholeWords;
+
+        QTextCursor cursor = CurrentTab->editor->textCursor();
+        // here , you save the cursor position
+        QTextCursor cursorSaved = cursor;
+
+        if (!CurrentTab->editor->find(s, flag))
+        {
+            //nothing is found | jump to start/end
+            cursor.movePosition(reverse?QTextCursor::End:QTextCursor::Start);
+
+            /* following line :
+            - the cursor is set at the beginning/end of the document (if search is reverse or not)
+            - in the next "find", if the word is found, now you will change the cursor position
+            */
+            CurrentTab->editor->setTextCursor(cursor);
+
+            if (!CurrentTab->editor->find(s, flag))
+            {
+                //no match in whole document
+                QMessageBox msgBox;
+                msgBox.setText(tr("String not found."));
+                msgBox.setStandardButtons(QMessageBox::Ok);
+                msgBox.setDefaultButton(QMessageBox::Ok);
+                msgBox.exec();
+
+                // word not found : we set the cursor back to its initial position
+                CurrentTab->editor->setTextCursor(cursorSaved);
+            }
+        }
 }
 
 void MainWindow::on_actionCompile_current_rule_triggered()
@@ -247,5 +291,17 @@ void MainWindow::on_action_triggered()
 {
     About about;
     about.exec();
+}
+
+void MainWindow::FindText( QString str, bool casesensitive )
+{
+    findString(str,false,casesensitive,false);
+}
+
+void MainWindow::on_actionLocate_triggered()
+{
+    static bool dialog_visible = false;
+
+    find->setVisible( dialog_visible? false : true );
 }
 

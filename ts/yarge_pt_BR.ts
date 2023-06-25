@@ -23,17 +23,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.ui" line="34"/>
+        <location filename="../mainwindow.ui" line="46"/>
         <source>File</source>
         <translation>Arquivo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="44"/>
+        <location filename="../mainwindow.ui" line="56"/>
         <source>Yara</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="50"/>
+        <location filename="../mainwindow.ui" line="62"/>
         <source>Tools</source>
         <translation>Ferramentas</translation>
     </message>
@@ -43,63 +43,83 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
-        <location filename="../mainwindow.ui" line="115"/>
+        <location filename="../mainwindow.ui" line="134"/>
         <source>Yarge Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="54"/>
+        <location filename="../mainwindow.ui" line="66"/>
         <source>Hash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="62"/>
+        <location filename="../mainwindow.ui" line="74"/>
         <source>About</source>
         <translation>Sobre</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="74"/>
+        <location filename="../mainwindow.ui" line="80"/>
+        <source>Edit</source>
+        <translation>Editar</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="93"/>
         <source>New...</source>
         <translation>Novo...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="79"/>
+        <location filename="../mainwindow.ui" line="98"/>
         <source>Open...</source>
         <translation>Abrir arquivo...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="84"/>
+        <location filename="../mainwindow.ui" line="103"/>
         <source>Save As...</source>
         <translation>Salvar como...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="89"/>
+        <location filename="../mainwindow.ui" line="108"/>
         <source>Save</source>
         <translation>Salvar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="92"/>
+        <location filename="../mainwindow.ui" line="111"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="97"/>
+        <location filename="../mainwindow.ui" line="116"/>
         <source>Exit</source>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="102"/>
+        <location filename="../mainwindow.ui" line="121"/>
         <source>MD5 File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="107"/>
-        <source>Compile rule...</source>
+        <location filename="../mainwindow.ui" line="126"/>
+        <source>Compile rule</source>
+        <translation>Compilar regra</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="139"/>
+        <source>Find</source>
+        <translation>Localizar</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="142"/>
+        <source>Ctrl+F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="110"/>
+        <location filename="../mainwindow.ui" line="129"/>
         <source>F5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="258"/>
+        <source>String not found.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -109,6 +129,24 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <location filename="../outputdialog.ui" line="20"/>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SearchDialog</name>
+    <message>
+        <location filename="../searchdialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../searchdialog.ui" line="32"/>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../searchdialog.ui" line="42"/>
+        <source>Case sensitive</source>
+        <translation>Dif. maiúsculas e minúsculas</translation>
     </message>
 </context>
 </TS>

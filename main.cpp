@@ -1,3 +1,8 @@
+/*
+* Yarge Editor
+* https://github.com/jlamk/yarge
+*
+*/
 #include "mainwindow.h"
 
 #include <QApplication>
