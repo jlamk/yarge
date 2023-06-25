@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/rc"/>
+    <qresource prefix="/">
+        <file>images/yarge2.png</file>
+        <file>images/yarge.png</file>
+    </qresource>
+</RCC>
