@@ -51,9 +51,19 @@ TRANSLATIONS += \
 CONFIG += lrelease
 CONFIG += embed_translations
 
+#
 LIBS += /usr/lib/libyara.so
 LIBS += /usr/lib/libjansson.so
 LIBS += /usr/lib/libssl.so
+
+# Windows
+#INCLUDEPATH += "yara include path"
+#LIBS += yara lib path/libyara.lib
+#LIBS += ws2_32.lib
+#LIBS += kernel32.lib
+#LIBS += user32.lib
+#LIBS += Advapi32.lib
+#LIBS += Crypt32.lib
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

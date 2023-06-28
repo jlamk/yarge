@@ -23,42 +23,47 @@
 void MainWindow::currentChanged(int index)
 {
     if (index == -1) {
-         return;
-     }
+        return;
+    }
 
-    QString title = this->tabwidget->tabText(index);
     QString filename = this->tabwidget->tabToolTip(index);
 
-    foreach( TAB *tab, this->tabwidget->pages )
+    foreach(TAB* tab, this->tabwidget->pages)
     {
-        if ( tab->filename == filename )
+        if (tab->filename == filename)
         {
             CurrentTab = tab;
             break;
         }
     }
+
 }
 
 void MainWindow::tabCloseRequested( int index )
 {
-   if (index == -1) {
+    if (index == -1) {
         return;
     }
+
     QString title = this->tabwidget->tabToolTip(index);
     DeletePage(title);
 }
 
-void MainWindow::DeletePage( const QString &filename )
+void MainWindow::DeletePage(const QString& filename)
 {
     int index = 0;
-    foreach (TAB *tab, this->tabwidget->pages) {
-        if ( tab == NULL ) continue;
-        if ( tab->filename == filename )
+    foreach (TAB* tab, this->tabwidget->pages)
+    {
+        if (tab == nullptr)
+            continue;
+
+        if (tab->filename == filename)
         {
             tab->editor->deleteLater();
             this->tabwidget->pages.remove(index);
             break;
         }
+
         index++;
     }
 }
@@ -77,34 +82,39 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("Yarge Editor "+QString::fromStdString(APP_VERSION));
+    setWindowTitle("Yarge Editor " + QString::fromStdString(APP_VERSION));
+
+    // Initialize YARGE_YARA
     this->yarge_yara = new YARGE_YARA();
 
+    // Create and configure tab widget
     tabwidget = new TABWIDGET();
     tabwidget->setTabsClosable(true);
-    connect( tabwidget,SIGNAL( tabCloseRequested(int) ), this, SLOT( tabCloseRequested(int) )  );
-    connect( tabwidget,SIGNAL( currentChanged(int) ), this, SLOT( currentChanged(int) )  );
+    connect(tabwidget, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
+    connect(tabwidget, SIGNAL(currentChanged(int)), this, SLOT(currentChanged(int)));
+    tabwidget->setStyleSheet("color:black; background-color:#fdf6e3;");
+    ui->centralwidget->layout()->setContentsMargins(0, 0, 0, 0);
 
-    this->tabwidget->setStyleSheet("color:black; background-color:#fdf6e3;");
-    ui->centralwidget->layout()->setContentsMargins(0,0,0,0);
-
-    main_layout = new QSplitter( Qt::Vertical );
-
+    // Create main layout
+    main_layout = new QSplitter(Qt::Vertical);
     main_layout->addWidget(tabwidget);
 
-    if ( arguments.count() == 2 )
+    // Open file from command line argument
+    if (arguments.count() == 2)
     {
         QString filePath = arguments[1];
-        if (!filePath.isEmpty()) {
+        if (!filePath.isEmpty())
+        {
             QFile file(filePath);
-            if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
                 QTextStream in(&file);
                 QString fileContent = in.readAll();
 
                 QFileInfo info(filePath);
                 TAB* tab = new TAB();
                 tab->title = info.baseName();
-                tab->filename= filePath;
+                tab->filename = filePath;
                 NewPage(tab);
                 CurrentTab->editor->document()->setPlainText(fileContent);
                 file.close();
@@ -113,22 +123,25 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
     }
     else
     {
-        TAB *tab = new TAB();
+        // Create new file tab with default content
+        TAB* tab = new TAB();
         tab->title = "New File";
         NewPage(tab);
         tab->editor->document()->setPlainText("import \"pe\"\n\nrule RuleName {\n\nmeta:\n\tauthor = \"JLAMK\"\n\tdesc = \"Yarge Editor\"\n\n\nstrings:\n\t$a = \"Yarge\"\n\t$b = \"Editor\"\n\ncondition:\n\tany of them \n\n}");
     }
 
-
+    // Create and configure output dialog
     this->output_dialog = new OutputDialog();
     main_layout->addWidget(this->output_dialog);
-    this->output_dialog ->setVisible(false);
+    this->output_dialog->setVisible(false);
 
+    // Create and configure search dialog
     find = new SearchDialog();
     main_layout->addWidget(find);
     find->setVisible(false);
-    connect( find,SIGNAL( Find( QString,bool ) ),this, SLOT( FindText( QString,bool  ) )  );
+    connect(find, SIGNAL(Find(QString, bool)), this, SLOT(FindText(QString, bool)));
 
+    // Set the main layout as the central widget
     setCentralWidget(main_layout);
 }
 
@@ -217,7 +230,7 @@ void MainWindow::on_actionSave_triggered()
             this->tabwidget->setTabToolTip(this->tabwidget->currentIndex(), filePath);
 
             ui->statusBar->showMessage("Saved "+CurrentTab->filename);
-    }
+        }
 
     }
     else
@@ -241,50 +254,50 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionFile_Md5_hash_triggered()
 {
-     QString filePath = QFileDialog::getOpenFileName(this, "Open File");
-     if ( filePath.isEmpty() ) return;
-     QString hash = calculateFileHash(filePath);
-     QInputDialog dialog;
-     dialog.setLabelText(filePath);
-     dialog.setTextValue(hash);
-     dialog.exec();
+    QString filePath = QFileDialog::getOpenFileName(this, "Open File");
+    if ( filePath.isEmpty() ) return;
+    QString hash = calculateFileHash(filePath);
+    QInputDialog dialog;
+    dialog.setLabelText(filePath);
+    dialog.setTextValue(hash);
+    dialog.exec();
 }
 
 void MainWindow::findString(QString s, bool reverse, bool casesens, bool words)
 {
     QTextDocument::FindFlags flag;
-        if (reverse) flag |= QTextDocument::FindBackward;
-        if (casesens) flag |= QTextDocument::FindCaseSensitively;
-        if (words) flag |= QTextDocument::FindWholeWords;
+    if (reverse) flag |= QTextDocument::FindBackward;
+    if (casesens) flag |= QTextDocument::FindCaseSensitively;
+    if (words) flag |= QTextDocument::FindWholeWords;
 
-        QTextCursor cursor = CurrentTab->editor->textCursor();
-        // here , you save the cursor position
-        QTextCursor cursorSaved = cursor;
+    QTextCursor cursor = CurrentTab->editor->textCursor();
+    // here , you save the cursor position
+    QTextCursor cursorSaved = cursor;
 
-        if (!CurrentTab->editor->find(s, flag))
-        {
-            //nothing is found | jump to start/end
-            cursor.movePosition(reverse?QTextCursor::End:QTextCursor::Start);
+    if (!CurrentTab->editor->find(s, flag))
+    {
+        //nothing is found | jump to start/end
+        cursor.movePosition(reverse?QTextCursor::End:QTextCursor::Start);
 
-            /* following line :
+        /* following line :
             - the cursor is set at the beginning/end of the document (if search is reverse or not)
             - in the next "find", if the word is found, now you will change the cursor position
             */
-            CurrentTab->editor->setTextCursor(cursor);
+        CurrentTab->editor->setTextCursor(cursor);
 
-            if (!CurrentTab->editor->find(s, flag))
-            {
-                //no match in whole document
-                QMessageBox msgBox;
-                msgBox.setText(tr("Not found."));
-                msgBox.setStandardButtons(QMessageBox::Ok);
-                msgBox.setDefaultButton(QMessageBox::Ok);
-                msgBox.exec();
+        if (!CurrentTab->editor->find(s, flag))
+        {
+            //no match in whole document
+            QMessageBox msgBox;
+            msgBox.setText(tr("Not found."));
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.exec();
 
-                // word not found : we set the cursor back to its initial position
-                CurrentTab->editor->setTextCursor(cursorSaved);
-            }
+            // word not found : we set the cursor back to its initial position
+            CurrentTab->editor->setTextCursor(cursorSaved);
         }
+    }
 }
 
 void MainWindow::on_actionCompile_current_rule_triggered()
@@ -329,22 +342,22 @@ void MainWindow::on_actionLocate_triggered()
 
 void MainWindow::on_actionScan_file_triggered()
 {
-
     QString filePath = QFileDialog::getOpenFileName(this, "Open File to Scan");
-    if ( filePath.isEmpty() ) return;
+    if (filePath.isEmpty())
+        return;
 
-    MATCH_DATA_LIST *data = new MATCH_DATA_LIST();
-    DATA_PTR *data_ptr = new DATA_PTR();
+    MATCH_DATA_LIST* data = new MATCH_DATA_LIST();
+    DATA_PTR* data_ptr = new DATA_PTR();
     data_ptr->filename = filePath;
     data_ptr->match_data_list_ptr = data;
 
-    yarge_yara->Scan_File(data_ptr,CurrentTab->editor->toPlainText(), filePath);
+    yarge_yara->Scan_File(data_ptr, CurrentTab->editor->toPlainText(), filePath);
 
-    if ( data_ptr->match_data_list_ptr->matchs_list.count() == 0 )
+    if (data_ptr->match_data_list_ptr->matchs_list.count() == 0)
     {
         delete data;
         delete data_ptr;
-        QMessageBox::information(this,"Yarge Editor","No signature found in the selected file.");
+        QMessageBox::information(this, "Yarge Editor", "No matching signatures found in the selected file.");
         return;
     }
 
@@ -355,40 +368,42 @@ void MainWindow::on_actionScan_file_triggered()
 
     delete data;
     delete data_ptr;
+
 }
 
 void MainWindow::on_actionScan_Directory_triggered()
 {
     QString directoryPath = QFileDialog::getExistingDirectory(
-         nullptr,
-         "Select Directory to Scan",
-         QString(),
-         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
-     );
-    if (directoryPath.isEmpty()) return;
+                nullptr,
+                "Select Directory to Scan",
+                QString(),
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+                );
+    if (directoryPath.isEmpty())
+        return;
 
     QDirIterator it(directoryPath, QDir::Files | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
     ui->statusBar->showMessage("Scan started.");
     DialogRulesMatch dialog;
 
-    while (it.hasNext()) {
+    while (it.hasNext())
+    {
         QString entry = it.next();
         QFileInfo fileInfo(entry);
 
-        if (fileInfo.isFile()) {
-            MATCH_DATA_LIST *data = new MATCH_DATA_LIST();
-            DATA_PTR *data_ptr = new DATA_PTR();
+        if (fileInfo.isFile())
+        {
+            MATCH_DATA_LIST* data = new MATCH_DATA_LIST();
+            DATA_PTR* data_ptr = new DATA_PTR();
             data_ptr->filename = fileInfo.filePath();
             data_ptr->match_data_list_ptr = data;
-            yarge_yara->Scan_File(data_ptr,CurrentTab->editor->toPlainText(), fileInfo.filePath());
+            yarge_yara->Scan_File(data_ptr, CurrentTab->editor->toPlainText(), fileInfo.filePath());
 
-            if ( data_ptr->match_data_list_ptr->matchs_list.count() > 0 )
+            if (data_ptr->match_data_list_ptr->matchs_list.count() > 0)
             {
-
                 dialog.SetData(data_ptr);
                 dialog.load();
             }
-
 
             delete data;
             delete data_ptr;
@@ -396,5 +411,5 @@ void MainWindow::on_actionScan_Directory_triggered()
     }
     ui->statusBar->showMessage("Scan complete!");
     dialog.exec();
-}
 
+}

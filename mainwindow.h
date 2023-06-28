@@ -11,7 +11,6 @@
 #include <QVector>
 #include <QString>
 #include <QSplitter>
-#include <yara.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,7 +23,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QStringList arguments,QWidget *parent = nullptr);
     ~MainWindow();
-        YARGE_YARA *yarge_yara;
+    YARGE_YARA *yarge_yara;
 
 public slots:
     void FindText( QString str, bool casesensitive );

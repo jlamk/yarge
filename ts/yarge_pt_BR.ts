@@ -43,6 +43,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="129"/>
+        <source>Compile rules</source>
+        <translation>Compilar regras</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="150"/>
         <source>Scan file...</source>
         <translation>Escanear arquivo...</translation>
@@ -114,9 +119,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="129"/>
         <source>Compile rule</source>
-        <translation>Compilar regra</translation>
+        <translation type="vanished">Compilar regra</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="142"/>
@@ -134,9 +138,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="279"/>
+        <location filename="../mainwindow.cpp" line="292"/>
         <source>Not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não encontrado.</translation>
     </message>
 </context>
 <context>

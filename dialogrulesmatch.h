@@ -1,7 +1,6 @@
 #ifndef DIALOGRULESMATCH_H
 #define DIALOGRULESMATCH_H
 
-#include <yara.h>
 #include "yarge_yara.h"
 #include <QDialog>
 #include <QVector>

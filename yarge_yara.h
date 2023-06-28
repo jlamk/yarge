@@ -5,13 +5,11 @@
 #include <QString>
 #include <QVector>
 
-#include <yara.h>
-
 class MATCH_STRING
 {
 public:
-       QString identifier;
-       QString value;
+    QString identifier;
+    QString value;
 };
 
 class MATCH_DATA
@@ -41,7 +39,7 @@ class YARGE_YARA : public QObject
     Q_OBJECT
 public:
     explicit YARGE_YARA(QObject *parent = nullptr);
-    YR_RULES* Compile(  QString text );
+    void* Compile(  QString text );
     QString output;
 
     void Scan_File(DATA_PTR *data, const QString &textRule, const QString &filename );

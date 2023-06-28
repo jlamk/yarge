@@ -2,6 +2,7 @@
 
 #include <yara.h>
 #include <QDebug>
+#include <yara.h>
 
 YARGE_YARA::YARGE_YARA(QObject *parent)
     : QObject{parent}
@@ -10,12 +11,12 @@ YARGE_YARA::YARGE_YARA(QObject *parent)
 }
 
 void callback_function(
-    int error_level,
-    const char* file_name,
-    int line_number,
-    const YR_RULE* rule,
-    const char* message,
-    void* user_data)
+        int error_level,
+        const char* file_name,
+        int line_number,
+        const YR_RULE* rule,
+        const char* message,
+        void* user_data)
 {
     QString *output = (QString*)user_data;
     char buf[1024];
@@ -24,42 +25,42 @@ void callback_function(
 }
 
 static int callback_match(
-    YR_SCAN_CONTEXT* context,
-    int message,
-    void *message_data,
-    void* user_data)
+        YR_SCAN_CONTEXT* context,
+        int message,
+        void *message_data,
+        void* user_data)
 {
-  if (message == CALLBACK_MSG_RULE_MATCHING)
-  {
-    YR_RULE* r = (YR_RULE*) message_data;
+    if (message == CALLBACK_MSG_RULE_MATCHING)
+    {
+        YR_RULE* r = (YR_RULE*) message_data;
 
-    DATA_PTR *data_ptr = (DATA_PTR*)user_data;
+        DATA_PTR *data_ptr = (DATA_PTR*)user_data;
 
-    MATCH_DATA_LIST *data = data_ptr->match_data_list_ptr;
+        MATCH_DATA_LIST *data = data_ptr->match_data_list_ptr;
 
-   MATCH_DATA newitem;
+        MATCH_DATA newitem;
 
-   newitem.ruleName = r->identifier;
-   newitem.filename =data_ptr->filename;
-   YR_STRING *s = NULL;
+        newitem.ruleName = r->identifier;
+        newitem.filename =data_ptr->filename;
+        YR_STRING *s = NULL;
 
-   yr_rule_strings_foreach(r,s)
-   {
-       MATCH_STRING sstring;
-       sstring.identifier = s->identifier;
-       sstring.value = QString((char*)s->string);
-       newitem.strings_match.append(sstring);
-   }
+        yr_rule_strings_foreach(r,s)
+        {
+            MATCH_STRING sstring;
+            sstring.identifier = s->identifier;
+            sstring.value = QString((char*)s->string);
+            newitem.strings_match.append(sstring);
+        }
 
-   data->matchs_list.append(newitem);
+        data->matchs_list.append(newitem);
 
-    return CALLBACK_CONTINUE;
-  }
+        return CALLBACK_CONTINUE;
+    }
 
-  return CALLBACK_CONTINUE;;
+    return CALLBACK_CONTINUE;;
 }
 
-YR_RULES* YARGE_YARA::Compile(  QString text )
+void* YARGE_YARA::Compile(  QString text )
 {
     if ( text.isEmpty() ) return NULL;
 
@@ -97,6 +98,6 @@ YR_RULES* YARGE_YARA::Compile(  QString text )
 
 void YARGE_YARA::Scan_File(DATA_PTR *data, const QString &textRule, const QString &filename )
 {
-    YR_RULES *rules = Compile( textRule );
+    YR_RULES *rules = (YR_RULES*)Compile( textRule );
     yr_rules_scan_file( rules,filename.toStdString().c_str(),SCAN_FLAGS_REPORT_RULES_MATCHING,callback_match, (void*)data,5000);
 }

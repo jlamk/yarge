@@ -126,7 +126,7 @@
   </action>
   <action name="actionCompile_current_rule">
    <property name="text">
-    <string>Compile rule</string>
+    <string>Compile rules</string>
    </property>
    <property name="shortcut">
     <string>F5</string>

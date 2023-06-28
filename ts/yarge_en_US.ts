@@ -95,7 +95,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../mainwindow.ui" line="129"/>
-        <source>Compile rule</source>
+        <source>Compile rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -134,7 +134,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="279"/>
+        <location filename="../mainwindow.cpp" line="292"/>
         <source>Not found.</source>
         <translation type="unfinished"></translation>
     </message>
