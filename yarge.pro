@@ -6,7 +6,7 @@ CONFIG += c++17
 
 RC_ICONS = yarge2.ico
 
-VERSION = 1.1.0
+VERSION = 1.2.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -15,6 +15,7 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 SOURCES += \
     about.cpp \
+    dialogrulesmatch.cpp \
     hash.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -22,20 +23,24 @@ SOURCES += \
     outputdialog.cpp \
     searchdialog.cpp \
     tab.cpp \
+    utils.cpp \
     yarge_yara.cpp
 
 HEADERS += \
     about.h \
+    dialogrulesmatch.h \
     hash.h \
     mainwindow.h \
     codeeditor.h \
     outputdialog.h \
     searchdialog.h \
     tab.h \
+    utils.h \
     yarge_yara.h
 
 FORMS += \
     about.ui \
+    dialogrulesmatch.ui \
     mainwindow.ui \
     outputdialog.ui \
     searchdialog.ui
@@ -57,3 +62,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     rc.qrc
+
+DISTFILES +=

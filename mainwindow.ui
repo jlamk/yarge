@@ -56,6 +56,8 @@
      <string>Yara</string>
     </property>
     <addaction name="actionCompile_current_rule"/>
+    <addaction name="actionScan_file"/>
+    <addaction name="actionScan_Directory"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -63,7 +65,7 @@
     </property>
     <widget class="QMenu" name="menuHash">
      <property name="title">
-      <string>Hash</string>
+      <string>Hashs</string>
      </property>
      <addaction name="actionFile_Md5_hash"/>
     </widget>
@@ -80,6 +82,7 @@
      <string>Edit</string>
     </property>
     <addaction name="actionLocate"/>
+    <addaction name="actionPreferences"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -140,6 +143,27 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionScan_file">
+   <property name="text">
+    <string>Scan file...</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
+   </property>
+  </action>
+  <action name="actionScan_Directory">
+   <property name="text">
+    <string>Scan Directory...</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Preferences</string>
    </property>
   </action>
  </widget>

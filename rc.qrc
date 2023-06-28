@@ -3,5 +3,7 @@
     <qresource prefix="/">
         <file>images/yarge2.png</file>
         <file>images/yarge.png</file>
+        <file>images/img01.png</file>
+        <file>images/img02.png</file>
     </qresource>
 </RCC>

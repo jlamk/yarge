@@ -6,6 +6,8 @@
 #include "outputdialog.h"
 #include "about.h"
 #include "searchdialog.h"
+#include "dialogrulesmatch.h"
+#include "utils.h"
 
 #include <QFileDialog>
 #include <QFileInfo>
@@ -15,8 +17,8 @@
 #include <QDialog>
 #include <QInputDialog>
 #include <QMessageBox>
-
-TAB *CurrentTab;
+#include <QFileDialog>
+#include <QDirIterator>
 
 void MainWindow::currentChanged(int index)
 {
@@ -29,7 +31,7 @@ void MainWindow::currentChanged(int index)
 
     foreach( TAB *tab, this->tabwidget->pages )
     {
-        if ( tab->title == title )
+        if ( tab->filename == filename )
         {
             CurrentTab = tab;
             break;
@@ -42,16 +44,16 @@ void MainWindow::tabCloseRequested( int index )
    if (index == -1) {
         return;
     }
-    QString title = this->tabwidget->tabText(index);
+    QString title = this->tabwidget->tabToolTip(index);
     DeletePage(title);
 }
 
-void MainWindow::DeletePage( const QString &title )
+void MainWindow::DeletePage( const QString &filename )
 {
     int index = 0;
     foreach (TAB *tab, this->tabwidget->pages) {
         if ( tab == NULL ) continue;
-        if ( tab->title == title )
+        if ( tab->filename == filename )
         {
             tab->editor->deleteLater();
             this->tabwidget->pages.remove(index);
@@ -114,7 +116,7 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
         TAB *tab = new TAB();
         tab->title = "New File";
         NewPage(tab);
-        tab->editor->document()->setPlainText("import \"pe\"\n\nrule RuleName {\n\nmeta:\n      author = \"name\"\n      my_identifier_1 = \"identifier\"\n\nstrings:\n      $a = \"malware\"\n\ncondition:\n       any of them \n\n}");
+        tab->editor->document()->setPlainText("import \"pe\"\n\nrule RuleName {\n\nmeta:\n\tauthor = \"JLAMK\"\n\tdesc = \"Yarge Editor\"\n\n\nstrings:\n\t$a = \"Yarge\"\n\t$b = \"Editor\"\n\ncondition:\n\tany of them \n\n}");
     }
 
 
@@ -161,6 +163,11 @@ void MainWindow::on_actionOpen_triggered()
             tab->filename= filePath;
             NewPage(tab);
             CurrentTab->editor->document()->setPlainText(fileContent);
+            QFileInfo finfo(filePath);
+            CurrentTab->title = finfo.baseName();
+            CurrentTab->filename = filePath;
+            this->tabwidget->setTabText(this->tabwidget->currentIndex(), finfo.baseName() );
+            this->tabwidget->setTabToolTip(this->tabwidget->currentIndex(), filePath);
             file.close();
         }
     }
@@ -169,15 +176,20 @@ void MainWindow::on_actionOpen_triggered()
 void MainWindow::on_actionSave_As_triggered()
 {
     if ( CurrentTab->editor == NULL ) return;
-    QString filePath = QFileDialog::getSaveFileName(this, "Save File");
+    QString filePath = QFileDialog::getSaveFileName(this, "Save File","newrule.yar");
     CurrentTab->filename = filePath;
     if (!filePath.isEmpty()) {
         QFile file(filePath);
         if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             QTextStream out(&file);
             out << CurrentTab->editor->toPlainText();
+
             file.close();
         }
+        QFileInfo finfo(filePath);
+        CurrentTab->title = finfo.baseName();
+        this->tabwidget->setTabText(this->tabwidget->currentIndex(), finfo.baseName() );
+        this->tabwidget->setTabToolTip(this->tabwidget->currentIndex(), filePath);
     }
 }
 
@@ -187,9 +199,9 @@ void MainWindow::on_actionSave_triggered()
 
     QString filePath;
 
-    if ( CurrentTab->filename == "" )
+    if ( !fileExists(CurrentTab->filename) )
     {
-        filePath = QFileDialog::getSaveFileName(this, "Save File");
+        filePath = QFileDialog::getSaveFileName(this, "Save File","newrule.yar");
         if (!filePath.isEmpty()) {
             QFile file(filePath);
             if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -198,6 +210,13 @@ void MainWindow::on_actionSave_triggered()
                 file.close();
             }
             CurrentTab->filename  = filePath;
+
+            QFileInfo finfo(filePath);
+            CurrentTab->title = finfo.baseName();
+            this->tabwidget->setTabText(this->tabwidget->currentIndex(), finfo.baseName() );
+            this->tabwidget->setTabToolTip(this->tabwidget->currentIndex(), filePath);
+
+            ui->statusBar->showMessage("Saved "+CurrentTab->filename);
     }
 
     }
@@ -209,8 +228,10 @@ void MainWindow::on_actionSave_triggered()
             out << CurrentTab->editor->toPlainText();
             file.close();
         }
+
+        ui->statusBar->showMessage("Saved "+CurrentTab->filename);
     }
-    ui->statusBar->showMessage("Saved at "+CurrentTab->filename);
+
 }
 
 void MainWindow::on_actionExit_triggered()
@@ -255,7 +276,7 @@ void MainWindow::findString(QString s, bool reverse, bool casesens, bool words)
             {
                 //no match in whole document
                 QMessageBox msgBox;
-                msgBox.setText(tr("String not found."));
+                msgBox.setText(tr("Not found."));
                 msgBox.setStandardButtons(QMessageBox::Ok);
                 msgBox.setDefaultButton(QMessageBox::Ok);
                 msgBox.exec();
@@ -274,18 +295,19 @@ void MainWindow::on_actionCompile_current_rule_triggered()
         return;
     }
 
-    this->yarge_yara->Compile( CurrentTab->editor->toPlainText() );
-    if ( yarge_yara->output == "" )
+    this->yarge_yara->Compile( CurrentTab->editor->toPlainText());
+    if ( !yarge_yara->output.isEmpty() )
     {
-        ui->statusBar->showMessage( "Rules compiled successfully!" );
-        this->output_dialog ->setVisible(false);
+        this->output_dialog ->setVisible(true);
+        this->output_dialog->SetText(this->yarge_yara->output );
+        this->yarge_yara->output = "";
         return;
     }
-    this->output_dialog ->setVisible(true);
-    this->output_dialog->SetText(this->yarge_yara->output );
-    this->yarge_yara->output = "";
-}
 
+    ui->statusBar->showMessage( "Rules compiled successfully!" );
+    this->output_dialog ->setVisible(false);
+
+}
 
 void MainWindow::on_action_triggered()
 {
@@ -303,5 +325,76 @@ void MainWindow::on_actionLocate_triggered()
     static bool dialog_visible = false;
 
     find->setVisible( dialog_visible? false : true );
+}
+
+void MainWindow::on_actionScan_file_triggered()
+{
+
+    QString filePath = QFileDialog::getOpenFileName(this, "Open File to Scan");
+    if ( filePath.isEmpty() ) return;
+
+    MATCH_DATA_LIST *data = new MATCH_DATA_LIST();
+    DATA_PTR *data_ptr = new DATA_PTR();
+    data_ptr->filename = filePath;
+    data_ptr->match_data_list_ptr = data;
+
+    yarge_yara->Scan_File(data_ptr,CurrentTab->editor->toPlainText(), filePath);
+
+    if ( data_ptr->match_data_list_ptr->matchs_list.count() == 0 )
+    {
+        delete data;
+        delete data_ptr;
+        QMessageBox::information(this,"Yarge Editor","No signature found in the selected file.");
+        return;
+    }
+
+    DialogRulesMatch dialog;
+    dialog.SetData(data_ptr);
+    dialog.load();
+    dialog.exec();
+
+    delete data;
+    delete data_ptr;
+}
+
+void MainWindow::on_actionScan_Directory_triggered()
+{
+    QString directoryPath = QFileDialog::getExistingDirectory(
+         nullptr,
+         "Select Directory to Scan",
+         QString(),
+         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+     );
+    if (directoryPath.isEmpty()) return;
+
+    QDirIterator it(directoryPath, QDir::Files | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+    ui->statusBar->showMessage("Scan started.");
+    DialogRulesMatch dialog;
+
+    while (it.hasNext()) {
+        QString entry = it.next();
+        QFileInfo fileInfo(entry);
+
+        if (fileInfo.isFile()) {
+            MATCH_DATA_LIST *data = new MATCH_DATA_LIST();
+            DATA_PTR *data_ptr = new DATA_PTR();
+            data_ptr->filename = fileInfo.filePath();
+            data_ptr->match_data_list_ptr = data;
+            yarge_yara->Scan_File(data_ptr,CurrentTab->editor->toPlainText(), fileInfo.filePath());
+
+            if ( data_ptr->match_data_list_ptr->matchs_list.count() > 0 )
+            {
+
+                dialog.SetData(data_ptr);
+                dialog.load();
+            }
+
+
+            delete data;
+            delete data_ptr;
+        }
+    }
+    ui->statusBar->showMessage("Scan complete!");
+    dialog.exec();
 }
 

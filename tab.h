@@ -3,6 +3,7 @@
 
 #include "codeeditor.h"
 #include "tab.h"
+#include "utils.h"
 
 #include <QString>
 #include <QTabWidget>
@@ -26,7 +27,7 @@ public:
     {
         static int nextTabId = 0;
         nextTabId++;
-
+        tab->filename = generateRandomString(40);
         tab->id = nextTabId;
         tab->editor = new CodeEditor();
         pages.append(tab);

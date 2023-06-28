@@ -3,28 +3,48 @@
 
 #include <QObject>
 #include <QString>
+#include <QVector>
 
 #include <yara.h>
 
-/*
-class ERROR_DATA
+class MATCH_STRING
 {
 public:
-    int error_level;
-    QString file_name;
-    int line_number;
-    YR_RULE rule;
-    QString message;
+       QString identifier;
+       QString value;
 };
-*/
+
+class MATCH_DATA
+{
+public:
+    QString ruleName;
+    QString filename;
+    QVector<MATCH_STRING> strings_match;
+};
+
+class MATCH_DATA_LIST
+{
+public:
+    QVector<MATCH_DATA> matchs_list;
+};
+
+class DATA_PTR
+{
+public:
+    QString filename;
+    MATCH_DATA_LIST *match_data_list_ptr;
+};
+
 
 class YARGE_YARA : public QObject
 {
     Q_OBJECT
 public:
     explicit YARGE_YARA(QObject *parent = nullptr);
-    void Compile( QString text  );
+    YR_RULES* Compile(  QString text );
     QString output;
+
+    void Scan_File(DATA_PTR *data, const QString &textRule, const QString &filename );
 
 signals:
 

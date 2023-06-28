@@ -11,6 +11,7 @@
 #include <QVector>
 #include <QString>
 #include <QSplitter>
+#include <yara.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,6 +24,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QStringList arguments,QWidget *parent = nullptr);
     ~MainWindow();
+        YARGE_YARA *yarge_yara;
 
 public slots:
     void FindText( QString str, bool casesensitive );
@@ -48,16 +50,21 @@ private slots:
 
     void on_actionLocate_triggered();
 
+    void on_actionScan_file_triggered();
+
+    void on_actionScan_Directory_triggered();
+
 private:
     Ui::MainWindow *ui;
     TABWIDGET *tabwidget;
-    YARGE_YARA *yarge_yara;
     OutputDialog *output_dialog;
     QSplitter *main_layout;
     SearchDialog *find;
+    TAB *CurrentTab;
 
     void NewPage( TAB *tab );
-    void DeletePage( const QString &title );
+    void DeletePage( const QString &filename );
     void findString(QString s, bool reverse, bool casesens, bool words);
+
 };
 #endif // MAINWINDOW_H
