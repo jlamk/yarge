@@ -6,7 +6,7 @@ CONFIG += c++17
 
 RC_ICONS = yarge2.ico
 
-VERSION = 1.2.0
+VERSION = 1.3.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -17,6 +17,7 @@ SOURCES += \
     about.cpp \
     dialogrulesmatch.cpp \
     hash.cpp \
+    highlighter.cpp \
     main.cpp \
     mainwindow.cpp \
     codeeditor.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
     about.h \
     dialogrulesmatch.h \
     hash.h \
+    highlighter.h \
     mainwindow.h \
     codeeditor.h \
     outputdialog.h \

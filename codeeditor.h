@@ -52,6 +52,7 @@
 #define CODEEDITOR_H
 
 #include <QPlainTextEdit>
+#include <QContextMenuEvent>
 
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
@@ -74,16 +75,24 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
+
+public slots:
+    void contextMenuEvent(QContextMenuEvent *event);
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect &rect, int dy);
+    void handleToHexAction();
+    void handleToAsciiAction();
+
 
 private:
     QWidget *lineNumberArea;
+
 };
 
 //![codeeditordefinition]

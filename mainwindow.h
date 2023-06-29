@@ -64,6 +64,5 @@ private:
     void NewPage( TAB *tab );
     void DeletePage( const QString &filename );
     void findString(QString s, bool reverse, bool casesens, bool words);
-
 };
 #endif // MAINWINDOW_H

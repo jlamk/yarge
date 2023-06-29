@@ -18,7 +18,9 @@
     <normaloff>:/images/yarge.png</normaloff>:/images/yarge.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(255, 255, 255);</string>
+   <string notr="true">About{
+	background-color: rgb(255, 255, 255);
+}</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">

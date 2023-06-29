@@ -52,6 +52,62 @@
 
 #include <QPainter>
 #include <QTextBlock>
+#include <QMenu>
+#include <QRegularExpression>
+#include <QAction>
+#include <QInputDialog>
+
+void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu *menu = createStandardContextMenu();
+
+    //Convert Menu
+    QMenu *convertMenu = menu->addMenu(tr("Convert"));
+
+    QAction *toHexAction = convertMenu->addAction(tr("Ascii to hex"));
+    connect(toHexAction, &QAction::triggered, this, &CodeEditor::handleToHexAction);
+
+    QAction *toAsciiAction = convertMenu->addAction(tr("Hex to ascii"));
+    connect(toAsciiAction, &QAction::triggered, this, &CodeEditor::handleToAsciiAction);
+
+    menu->exec(event->globalPos());
+    delete menu;
+}
+
+void CodeEditor::handleToAsciiAction()
+{
+    QTextCursor cursor = textCursor();
+
+    if (cursor.hasSelection()) {
+        QString selectedText = cursor.selectedText();
+        selectedText.remove(QRegularExpression("[^0-9A-Fa-f]"));
+
+        QByteArray hexData = QByteArray::fromHex(selectedText.toLatin1());
+        QString asciiString = QString::fromLatin1(hexData);
+
+        cursor.insertText(asciiString);
+        setTextCursor(cursor);
+    }
+}
+
+void CodeEditor::handleToHexAction()
+{
+    QTextCursor cursor = textCursor();
+
+    if (cursor.hasSelection()) {
+        QString selectedText = cursor.selectedText();
+        QByteArray byteArray = selectedText.toUtf8();
+        QString hexString = byteArray.toHex().toUpper();
+
+        QString hexStringWithSpaces;
+        for (int i = 0; i < hexString.length(); i += 2) {
+            hexStringWithSpaces += hexString.mid(i, 2) + " ";
+        }
+
+        cursor.insertText(hexStringWithSpaces);
+        setTextCursor(cursor);
+    }
+}
 
 //![constructor]
 
@@ -153,16 +209,16 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), Qt::lightGray);
 
-//![extraAreaPaintEvent_0]
+    //![extraAreaPaintEvent_0]
 
-//![extraAreaPaintEvent_1]
+    //![extraAreaPaintEvent_1]
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
     int top = qRound(blockBoundingGeometry(block).translated(contentOffset()).top());
     int bottom = top + qRound(blockBoundingRect(block).height());
-//![extraAreaPaintEvent_1]
+    //![extraAreaPaintEvent_1]
 
-//![extraAreaPaintEvent_2]
+    //![extraAreaPaintEvent_2]
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);

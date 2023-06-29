@@ -92,7 +92,7 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
     tabwidget->setTabsClosable(true);
     connect(tabwidget, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
     connect(tabwidget, SIGNAL(currentChanged(int)), this, SLOT(currentChanged(int)));
-    tabwidget->setStyleSheet("color:black; background-color:#fdf6e3;");
+    tabwidget->setStyleSheet("CodeEditor{ color:black; background-color:#fdf6e3;}");
     ui->centralwidget->layout()->setContentsMargins(0, 0, 0, 0);
 
     // Create main layout
@@ -147,6 +147,10 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    output_dialog->deleteLater();
+    main_layout->deleteLater();
+    this->find->deleteLater();
+    this->yarge_yara->deleteLater();
     delete ui;
 }
 

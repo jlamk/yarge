@@ -4,6 +4,7 @@
 #include "codeeditor.h"
 #include "tab.h"
 #include "utils.h"
+#include "highlighter.h"
 
 #include <QString>
 #include <QTabWidget>
@@ -16,24 +17,14 @@ public:
     QString filename;
     QString title;
     CodeEditor *editor;
+    Highlighter *highlighter;
 };
 
 class TABWIDGET : public QTabWidget {
 
 public:
     QVector<TAB*> pages;
-
-    int ya_addTab( TAB *tab )
-    {
-        static int nextTabId = 0;
-        nextTabId++;
-        tab->filename = generateRandomString(40);
-        tab->id = nextTabId;
-        tab->editor = new CodeEditor();
-        pages.append(tab);
-
-        return QTabWidget::addTab(tab->editor, tab->title);
-    }
+    int ya_addTab( TAB *tab );
 
 private:
 
