@@ -8,6 +8,8 @@
 #include "searchdialog.h"
 #include "dialogrulesmatch.h"
 #include "utils.h"
+#include "dialogsettings.h"
+#include "settings.h"
 
 #include <QFileDialog>
 #include <QFileInfo>
@@ -60,6 +62,7 @@ void MainWindow::DeletePage(const QString& filename)
         if (tab->filename == filename)
         {
             tab->editor->deleteLater();
+            tab->editor = NULL;
             this->tabwidget->pages.remove(index);
             break;
         }
@@ -70,7 +73,7 @@ void MainWindow::DeletePage(const QString& filename)
 
 void MainWindow::NewPage( TAB *tab )
 {
-    int index = this->tabwidget->ya_addTab(tab);
+    int index = this->tabwidget->ya_addTab(this->settings,tab);
     CurrentTab = tab;
     this->tabwidget->setTabToolTip(index,tab->filename);
     this->tabwidget->setTabText( index, tab->title );
@@ -83,6 +86,11 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle("Yarge Editor " + QString::fromStdString(APP_VERSION));
+
+    this->settings = new Settings();
+    this->settings->loadConfig();
+
+    setGeometry(settings->lastX, settings->lastY, settings->lastWidth, settings->lastHeight);
 
     // Initialize YARGE_YARA
     this->yarge_yara = new YARGE_YARA();
@@ -145,12 +153,34 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
     setCentralWidget(main_layout);
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    this->settings->lastX = pos().x();
+    this->settings->lastY = pos().y();
+    this->settings->lastWidth = size().width();
+    this->settings->lastHeight = size().height();
+    settings->saveConfig();
+
+    event->accept();
+}
+
 MainWindow::~MainWindow()
 {
-    output_dialog->deleteLater();
-    main_layout->deleteLater();
-    this->find->deleteLater();
-    this->yarge_yara->deleteLater();
+    if ( this->output_dialog )
+        delete this->output_dialog;
+
+    if ( this->find )
+        delete this->find;
+
+    if ( this->yarge_yara )
+        delete this->yarge_yara;
+
+    if ( this->settings )
+        delete this->settings;
+
+    if ( this->main_layout )
+        delete this->main_layout;
+
     delete ui;
 }
 
@@ -306,6 +336,7 @@ void MainWindow::findString(QString s, bool reverse, bool casesens, bool words)
 
 void MainWindow::on_actionCompile_current_rule_triggered()
 {
+    if ( CurrentTab->editor == NULL ) return;
     if ( CurrentTab->editor->toPlainText().isEmpty() )
     {
         this->output_dialog ->setVisible(false);
@@ -417,3 +448,11 @@ void MainWindow::on_actionScan_Directory_triggered()
     dialog.exec();
 
 }
+
+void MainWindow::on_actionPreferences_triggered()
+{
+    DialogSettings dialog;
+    dialog.LoadSet(this->tabwidget,this->settings);
+    dialog.exec();
+}
+

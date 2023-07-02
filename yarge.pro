@@ -6,7 +6,7 @@ CONFIG += c++17
 
 RC_ICONS = yarge2.ico
 
-VERSION = 1.3.0
+VERSION = 1.4.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -16,6 +16,7 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 SOURCES += \
     about.cpp \
     dialogrulesmatch.cpp \
+    dialogsettings.cpp \
     hash.cpp \
     highlighter.cpp \
     main.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
     codeeditor.cpp \
     outputdialog.cpp \
     searchdialog.cpp \
+    settings.cpp \
     tab.cpp \
     utils.cpp \
     yarge_yara.cpp
@@ -30,12 +32,14 @@ SOURCES += \
 HEADERS += \
     about.h \
     dialogrulesmatch.h \
+    dialogsettings.h \
     hash.h \
     highlighter.h \
     mainwindow.h \
     codeeditor.h \
     outputdialog.h \
     searchdialog.h \
+    settings.h \
     tab.h \
     utils.h \
     yarge_yara.h
@@ -43,6 +47,7 @@ HEADERS += \
 FORMS += \
     about.ui \
     dialogrulesmatch.ui \
+    dialogsettings.ui \
     mainwindow.ui \
     outputdialog.ui \
     searchdialog.ui

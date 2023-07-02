@@ -5,6 +5,8 @@
 #include "tab.h"
 #include "utils.h"
 #include "highlighter.h"
+#include "tab.h"
+#include "settings.h"
 
 #include <QString>
 #include <QTabWidget>
@@ -24,7 +26,7 @@ class TABWIDGET : public QTabWidget {
 
 public:
     QVector<TAB*> pages;
-    int ya_addTab( TAB *tab );
+    int ya_addTab(Settings *settings, TAB *tab );
 
 private:
 

@@ -39,6 +39,25 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
 </context>
 <context>
+    <name>DialogSettings</name>
+    <message>
+        <location filename="../dialogsettings.ui" line="14"/>
+        <source>Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogsettings.ui" line="24"/>
+        <location filename="../dialogsettings.ui" line="40"/>
+        <source>Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogsettings.ui" line="30"/>
+        <source>Font Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
@@ -152,7 +171,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="296"/>
+        <location filename="../mainwindow.cpp" line="326"/>
         <source>Not found.</source>
         <translation type="unfinished"></translation>
     </message>

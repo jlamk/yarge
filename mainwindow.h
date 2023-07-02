@@ -6,11 +6,13 @@
 #include "yarge_yara.h"
 #include "outputdialog.h"
 #include "searchdialog.h"
+#include "settings.h"
 
 #include <QMainWindow>
 #include <QVector>
 #include <QString>
 #include <QSplitter>
+#include <QCloseEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -53,6 +55,11 @@ private slots:
 
     void on_actionScan_Directory_triggered();
 
+    void on_actionPreferences_triggered();
+
+protected:
+        void closeEvent(QCloseEvent *event);
+
 private:
     Ui::MainWindow *ui;
     TABWIDGET *tabwidget;
@@ -60,6 +67,7 @@ private:
     QSplitter *main_layout;
     SearchDialog *find;
     TAB *CurrentTab;
+    Settings *settings;
 
     void NewPage( TAB *tab );
     void DeletePage( const QString &filename );
