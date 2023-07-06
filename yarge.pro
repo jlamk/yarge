@@ -6,7 +6,7 @@ CONFIG += c++17
 
 RC_ICONS = yarge2.ico
 
-VERSION = 1.4.0
+VERSION = 1.4.1
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # You can make your code fail to compile if it uses deprecated APIs.
