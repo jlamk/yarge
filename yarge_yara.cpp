@@ -10,6 +10,11 @@ YARGE_YARA::YARGE_YARA(QObject *parent)
     yr_initialize();
 }
 
+YARGE_YARA::~YARGE_YARA()
+{
+    yr_finalize();
+}
+
 void callback_function(
         int error_level,
         const char* file_name,

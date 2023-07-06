@@ -58,7 +58,24 @@ private slots:
     void on_actionPreferences_triggered();
 
 protected:
-        void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override
+    {
+        if (event->button() == Qt::LeftButton) {
+            // Store the initial mouse position relative to the window
+            dragPosition = event->globalPos() - frameGeometry().topLeft();
+            event->accept();
+        }
+    }
+
+    void mouseMoveEvent(QMouseEvent *event) override
+    {
+        if (event->buttons() & Qt::LeftButton) {
+            // Calculate the new position of the window based on the mouse movement
+            move(event->globalPos() - dragPosition);
+            event->accept();
+        }
+    }
 
 private:
     Ui::MainWindow *ui;
@@ -68,6 +85,7 @@ private:
     SearchDialog *find;
     TAB *CurrentTab;
     Settings *settings;
+    QPoint dragPosition;
 
     void NewPage( TAB *tab );
     void DeletePage( const QString &filename );

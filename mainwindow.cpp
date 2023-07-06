@@ -87,10 +87,11 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("Yarge Editor " + QString::fromStdString(APP_VERSION));
 
+    //Load settings
     this->settings = new Settings();
     this->settings->loadConfig();
 
-    setGeometry(settings->lastX, settings->lastY, settings->lastWidth, settings->lastHeight);
+    restoreGeometry(settings->geometryData);
 
     // Initialize YARGE_YARA
     this->yarge_yara = new YARGE_YARA();
@@ -155,10 +156,7 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    this->settings->lastX = pos().x();
-    this->settings->lastY = pos().y();
-    this->settings->lastWidth = size().width();
-    this->settings->lastHeight = size().height();
+    settings->geometryData = saveGeometry();
     settings->saveConfig();
 
     event->accept();
@@ -365,6 +363,7 @@ void MainWindow::on_action_triggered()
 
 void MainWindow::FindText( QString str, bool casesensitive )
 {
+    if ( CurrentTab->editor != NULL )
     findString(str,false,casesensitive,false);
 }
 

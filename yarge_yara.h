@@ -39,13 +39,10 @@ class YARGE_YARA : public QObject
     Q_OBJECT
 public:
     explicit YARGE_YARA(QObject *parent = nullptr);
+    ~YARGE_YARA();
     void* Compile(  QString text );
     QString output;
-
     void Scan_File(DATA_PTR *data, const QString &textRule, const QString &filename );
-
-signals:
-
 };
 
 #endif // YARGE_YARA_H

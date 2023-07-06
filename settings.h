@@ -4,15 +4,13 @@
 #include <QString>
 #include <QSettings>
 #include <QFont>
+#include <QByteArray>
 
 class Settings
 {
 public:
     QFont font;
-    int lastX;
-    int lastY;
-    int lastWidth;
-    int lastHeight;
+    QByteArray geometryData;
 
     void loadConfig();
     void saveConfig();
