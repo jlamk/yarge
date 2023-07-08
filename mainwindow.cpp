@@ -69,10 +69,15 @@ void MainWindow::NewPage( QString filename )
         const QString template_file = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/default_template.txt";
         tab->editor->document()->setPlainText( LoadFromFile(template_file) );
         this->tabwidget->setTabText(index,"default_template.txt");
-        this->tabwidget->setTabToolTip(index,"default_template.txt");
+        this->tabwidget->setTabToolTip(index,template_file);
     }
     else
+    {
       tab->editor->document()->setPlainText( LoadFromFile(filename) );
+      QFileInfo info(filename);
+      this->tabwidget->setTabText(index,info.baseName());
+      this->tabwidget->setTabToolTip(index,filename);
+    }
 
     this->tabwidget->setCurrentIndex(index);
 }
@@ -126,6 +131,13 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
       SaveToFile(LoadFromFile(":/rc/templates/default.txt"),template_file);
     }
 
+    // Open file from command line argument
+    if (arguments.count() > 1 )
+    {
+        QString filePath = arguments[1];
+        NewPage(filePath);
+    }
+    else
     on_actionNew_triggered();
 }
 
