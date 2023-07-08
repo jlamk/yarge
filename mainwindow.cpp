@@ -38,13 +38,29 @@ void MainWindow::tabCloseRequested( int index )
         return;
     }
     TAB* tab = qobject_cast<TAB*>(tabwidget->widget(index));
-    if ( tab )
+    if ( tab != NULL )
     {
-        delete tab->tlayout;
-        delete tab->editor;
-        tab->editor = nullptr;
-        tab->tlayout = nullptr;
+        if ( tab->highlighter != NULL )
+        {
+            delete tab->highlighter;
+            tab->highlighter = NULL;
+        }
+        if ( tab->editor != NULL )
+        {
+            delete tab->editor;
+            tab->editor = NULL;
+        }
+        if ( tab->tlayout != NULL )
+        {
+            delete tab->tlayout;
+            tab->tlayout = NULL;
+        }
+
         this->tabwidget->removeTab(index);
+        if ( tab != NULL )
+        {
+            delete tab;
+        }
     }
 }
 
@@ -73,10 +89,10 @@ void MainWindow::NewPage( QString filename )
     }
     else
     {
-      tab->editor->document()->setPlainText( LoadFromFile(filename) );
-      QFileInfo info(filename);
-      this->tabwidget->setTabText(index,info.baseName());
-      this->tabwidget->setTabToolTip(index,filename);
+        tab->editor->document()->setPlainText( LoadFromFile(filename) );
+        QFileInfo info(filename);
+        this->tabwidget->setTabText(index,info.baseName());
+        this->tabwidget->setTabToolTip(index,filename);
     }
 
     this->tabwidget->setCurrentIndex(index);
@@ -128,7 +144,7 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
     const QString template_file = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/default_template.txt";
     if ( !fileExists(template_file) )
     {
-      SaveToFile(LoadFromFile(":/rc/templates/default.txt"),template_file);
+        SaveToFile(LoadFromFile(":/rc/templates/default.txt"),template_file);
     }
 
     // Open file from command line argument
@@ -138,7 +154,7 @@ MainWindow::MainWindow(QStringList arguments, QWidget *parent)
         NewPage(filePath);
     }
     else
-    on_actionNew_triggered();
+        on_actionNew_triggered();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -151,19 +167,19 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 MainWindow::~MainWindow()
 {
-    if ( this->output_dialog )
+    if ( this->output_dialog != NULL )
         delete this->output_dialog;
 
-    if ( this->find )
+    if ( this->find != NULL )
         delete this->find;
 
-    if ( this->yarge_yara )
+    if ( this->yarge_yara != NULL )
         delete this->yarge_yara;
 
     if ( this->settings )
         delete this->settings;
 
-    if ( this->main_layout )
+    if ( this->main_layout != NULL )
         delete this->main_layout;
 
 
@@ -268,7 +284,7 @@ void MainWindow::on_actionFile_Md5_hash_triggered()
 
 void MainWindow::findString(QString s, bool reverse, bool casesens, bool words)
 {
-    if ( qobject_cast<TAB*>(tabwidget->widget(currentIndex)) == nullptr ) return;
+    if ( qobject_cast<TAB*>(tabwidget->widget(currentIndex)) == NULL ) return;
     TAB *tab = qobject_cast<TAB*>(tabwidget->widget(currentIndex));
 
     QTextDocument::FindFlags flag;
@@ -309,7 +325,7 @@ void MainWindow::findString(QString s, bool reverse, bool casesens, bool words)
 void MainWindow::on_actionCompile_current_rule_triggered()
 {
     TAB *tab = qobject_cast<TAB*>(tabwidget->widget(currentIndex));
-    if ( tab == nullptr ) return;
+    if ( tab == NULL ) return;
     if ( tab->editor == NULL ) return;
     if ( tab->editor->toPlainText().isEmpty() )
     {
@@ -340,7 +356,7 @@ void MainWindow::on_action_triggered()
 void MainWindow::FindText( QString str, bool casesensitive )
 {
     TAB *tab = qobject_cast<TAB*>(tabwidget->widget(currentIndex));
-    if ( tab == nullptr ) return;
+    if ( tab == NULL ) return;
     if ( tab->editor != NULL )
         findString(str,false,casesensitive,false);
 }
@@ -355,7 +371,7 @@ void MainWindow::on_actionLocate_triggered()
 void MainWindow::on_actionScan_file_triggered()
 {
     TAB *tab = qobject_cast<TAB*>(tabwidget->widget(currentIndex));
-    if ( tab == nullptr ) return;
+    if ( tab == NULL ) return;
 
     QString filePath = QFileDialog::getOpenFileName(this, "Open File to Scan");
     if (filePath.isEmpty())
@@ -389,7 +405,7 @@ void MainWindow::on_actionScan_file_triggered()
 void MainWindow::on_actionScan_Directory_triggered()
 {
     TAB *tab = qobject_cast<TAB*>(tabwidget->widget(currentIndex));
-    if ( tab == nullptr ) return;
+    if ( tab == NULL ) return;
 
     QString directoryPath = QFileDialog::getExistingDirectory(
         nullptr,
