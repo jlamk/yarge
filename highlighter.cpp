@@ -1,6 +1,7 @@
 // Copyright (C) 2016 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
+#include <QColor>
 #include "highlighter.h"
 
 //! [0]
@@ -34,8 +35,9 @@ Highlighter::Highlighter(QTextDocument *parent)
         rule.format = hexFormat;
         highlightingRules.append(rule);
     }
-
-    keywordFormat.setForeground( QColor::fromString( "#2596be" ) );
+    QColor color;
+    color.setNamedColor( "#2596be" );
+    keywordFormat.setForeground(color);
     keywordFormat.setFontWeight(QFont::Bold);
     const QString keywordPatterns[] = {
         QStringLiteral("\\ball\\b"), QStringLiteral("\\band\\b"), QStringLiteral("\\bany\\b"), QStringLiteral("\\bascii\\b"), QStringLiteral("\\bat\\b"),
