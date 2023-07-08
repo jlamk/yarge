@@ -1,6 +1,6 @@
 # Yarge Editor
 
-![Logo](images/yarge2.png )
+![Logo](rc/images/yarge2.png )
 
 Yarge Editor is a powerful, cross-platform, free, and open-source tool designed specifically for editing [YARA](https://github.com/VirusTotal/yara) rules.
 
@@ -10,6 +10,6 @@ Yarge Editor is a powerful, cross-platform, free, and open-source tool designed 
 
 # Dependencies
 [libyara](https://github.com/VirusTotal/yara)<br>
-[libjansson](libjansson)](https://github.com/akheron/jansson)<br>
+[libjansson](https://github.com/akheron/jansson)<br>
 libssl<br>
 qmake<br>
