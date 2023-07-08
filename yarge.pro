@@ -6,7 +6,7 @@ CONFIG += c++17
 
 RC_ICONS = yarge2.ico
 
-VERSION = 1.5.3
+VERSION = 1.5.4
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
