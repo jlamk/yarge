@@ -1,0 +1,20 @@
+import "pe"
+
+rule signature_name {
+    meta:
+        description = ""
+        md5 = ""
+        sha1 = ""
+        filename = ""
+        author = ""
+
+        Block = true
+        Log = true
+        Quarantine = false
+
+    strings:
+        $string = { 00 }
+
+    condition:
+        uint16(0) == 0x5A4D and uint32(uint32(0x3C)) == 0x4550 and $string
+}

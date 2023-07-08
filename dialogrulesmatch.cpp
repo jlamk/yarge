@@ -19,7 +19,7 @@ void DialogRulesMatch::load()
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
 
-    QIcon icon(":/images/img02.png");
+    QIcon icon(":/rc/images/img02.png");
     item->setIcon(0, icon);
 
     QString title = this->data_ptr->filename;

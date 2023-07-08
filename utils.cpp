@@ -25,3 +25,34 @@ bool fileExists( QString path) {
         return false;
     }
 }
+
+QByteArray LoadFromFile( const QString &resourcePath )
+{
+    QFile file(resourcePath);
+    if (!file.open(QIODevice::ReadOnly))
+        return QByteArray();
+
+    QByteArray data;
+    const int bufferSize = 8192;  // Adjust the buffer size as needed
+
+    while (!file.atEnd()) {
+        QByteArray chunk = file.read(bufferSize);
+        data.append(chunk);
+    }
+
+    file.close();
+    return data;
+}
+
+bool SaveToFile(const QByteArray& buf, const QString& filePath)
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly))
+        return false;
+
+    qint64 bytesWritten = file.write(buf);
+    file.close();
+
+    return bytesWritten == buf.size();
+}
+

@@ -34,6 +34,9 @@ private:
     QRegularExpression commentStartExpression;
     QRegularExpression commentEndExpression;
 
+    QTextCharFormat ruleNameFormat;
+    QTextCharFormat hexFormat;
+    QTextCharFormat stringFormat;
     QTextCharFormat keywordFormat;
     QTextCharFormat classFormat;
     QTextCharFormat singleLineCommentFormat;

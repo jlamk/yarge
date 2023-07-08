@@ -13,6 +13,7 @@
 #include <QString>
 #include <QSplitter>
 #include <QCloseEvent>
+#include <QShortcut>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,6 +30,7 @@ public:
 
 public slots:
     void FindText( QString str, bool casesensitive );
+    void NewPage( QString filename );
 
 private slots:
     void on_actionNew_triggered();
@@ -57,6 +59,8 @@ private slots:
 
     void on_actionPreferences_triggered();
 
+    void on_actionClose_Window_triggered();
+
 protected:
     void closeEvent(QCloseEvent *event);
     void mousePressEvent(QMouseEvent *event) override
@@ -79,16 +83,13 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-    TABWIDGET *tabwidget;
+    QTabWidget *tabwidget;
     OutputDialog *output_dialog;
     QSplitter *main_layout;
     SearchDialog *find;
-    TAB *CurrentTab;
     Settings *settings;
     QPoint dragPosition;
-
-    void NewPage( TAB *tab );
-    void DeletePage( const QString &filename );
+    int currentIndex;
     void findString(QString s, bool reverse, bool casesens, bool words);
 };
 #endif // MAINWINDOW_H

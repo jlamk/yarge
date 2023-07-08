@@ -14,7 +14,7 @@
    <string>Yarge Editor</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="rc.qrc">
+   <iconset>
     <normaloff>:/images/yarge2.png</normaloff>:/images/yarge2.png</iconset>
   </property>
   <property name="windowOpacity">
@@ -42,8 +42,9 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionOpen"/>
     <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionClose_Window"/>
     <addaction name="actionSave_As"/>
     <addaction name="actionSave"/>
     <addaction name="actionExit"/>
@@ -163,9 +164,15 @@
     <string>Preferences</string>
    </property>
   </action>
+  <action name="actionClose_Window">
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
  </widget>
- <resources>
-  <include location="rc.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

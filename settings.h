@@ -11,6 +11,7 @@ class Settings
 public:
     QFont font;
     QByteArray geometryData;
+    bool ShowDefaultTemplate;
 
     void loadConfig();
     void saveConfig();

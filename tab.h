@@ -11,25 +11,17 @@
 #include <QString>
 #include <QTabWidget>
 #include <QVector>
+#include <QWidget>
+#include <QHBoxLayout>
 
-class TAB
+class TAB : public QTabWidget
 {
+    Q_OBJECT
 public:
-    int id;
-    QString filename;
-    QString title;
+    QHBoxLayout *tlayout;
     CodeEditor *editor;
     Highlighter *highlighter;
-};
-
-class TABWIDGET : public QTabWidget {
-
-public:
-    QVector<TAB*> pages;
-    int ya_addTab(Settings *settings, TAB *tab );
-
-private:
-
+    bool isModified;
 };
 
 #endif // TAB_H

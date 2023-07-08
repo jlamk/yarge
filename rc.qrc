@@ -1,9 +1,10 @@
 <RCC>
     <qresource prefix="/rc"/>
     <qresource prefix="/">
-        <file>images/yarge2.png</file>
-        <file>images/yarge.png</file>
-        <file>images/img01.png</file>
-        <file>images/img02.png</file>
+        <file>rc/images/img01.png</file>
+        <file>rc/images/img02.png</file>
+        <file>rc/images/yarge.png</file>
+        <file>rc/images/yarge2.png</file>
+        <file>rc/templates/default.txt</file>
     </qresource>
 </RCC>

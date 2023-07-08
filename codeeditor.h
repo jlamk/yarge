@@ -74,7 +74,7 @@ public:
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
-
+    //bool isModified;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -82,13 +82,13 @@ protected:
 public slots:
     void contextMenuEvent(QContextMenuEvent *event);
 
+
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect &rect, int dy);
     void handleToHexAction();
     void handleToAsciiAction();
-
 
 private:
     QWidget *lineNumberArea;

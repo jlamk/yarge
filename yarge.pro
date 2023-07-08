@@ -6,7 +6,8 @@ CONFIG += c++17
 
 RC_ICONS = yarge2.ico
 
-VERSION = 1.4.0
+VERSION = 1.5.2
+
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -25,7 +26,6 @@ SOURCES += \
     outputdialog.cpp \
     searchdialog.cpp \
     settings.cpp \
-    tab.cpp \
     utils.cpp \
     yarge_yara.cpp
 

@@ -18,14 +18,14 @@ class DialogSettings : public QDialog
 public:
     explicit DialogSettings(QWidget *parent = nullptr);
     ~DialogSettings();
-    void LoadSet(TABWIDGET *pages, Settings *set );
+    void LoadSet(QTabWidget *pages, Settings *set );
 
 private slots:
     void on_buttonBox_accepted();
 
 private:
     Ui::DialogSettings *ui;
-    TABWIDGET *tabs;
+    QTabWidget *tabs;
     Settings *set;
 };
 
