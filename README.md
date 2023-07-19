@@ -22,4 +22,5 @@ $ ./yarge
 [libyara](https://github.com/VirusTotal/yara)<br>
 [libjansson](https://github.com/akheron/jansson)<br>
 libssl<br>
+qt<br>
 qmake<br>
