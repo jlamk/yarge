@@ -6,8 +6,6 @@ Yarge Editor is a powerful, cross-platform, free, and open-source tool designed 
 
 ![Screenshot](rc/images/screenshot.png )
 
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/jlamk)
-
 # Building 
 ```bash
 $ git clone https://github.com/jlamk/yarge.git
